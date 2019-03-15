@@ -8,12 +8,9 @@ from bs4 import BeautifulSoup
 import spider
 
 GAME_TIEBA_COUNT_ONE_PAGE = 40 * 5
-csv_f = None
-csv_w = None
+
 
 # 获取网页上两个Table内部的所有链接
-
-
 def get_href_in_td(html, td_index):
     if None == html:
         print('html_text is None')
@@ -66,14 +63,14 @@ def get_href_in_td(html, td_index):
 # 获取一个贴吧的关注数、帖子数
 def get_pop_of_tieba(html):
     if None == html:
-        print('html_text is None')
+        # print('html_text is None')
         return 0, 0
-    soup = BeautifulSoup(html, 'html.parser', from_encoding='utf-8')
-    if None == soup:
-        print('soup parse failed')
-        return 0, 0
-    # find td tags
     try:
+        soup = BeautifulSoup(html, 'html.parser', from_encoding='utf-8')
+        if None == soup:
+            print('soup parse failed')
+            return 0, 0
+        # find td tags
         span_collection = soup.find_all('span', class_="card_menNum")
         follower_count = str(span_collection[0].text).replace(",", "")
         span_collection = soup.find_all('span', class_="card_infoNum")
@@ -91,6 +88,8 @@ def export_game_tree_to_csv(tree):
             ["gamename", "gametype", "follower_count", "topic_count", "tiebaurl"])
         for base_node in tree[spider.GAME_TREE_BASE_TYPE]:
             for game_tieba in base_node[spider.GAME_TREE_GAME_COLLECTION]:
+                if len(str(game_tieba[spider.GAME_TREE_GAME_TIEBA_NAME])) <= 1:
+                    continue
                 csv_writer.writerow(
                     [game_tieba[spider.GAME_TREE_GAME_TIEBA_NAME],
                      base_node[spider.GAME_TREE_BASE_NAME],
@@ -99,14 +98,16 @@ def export_game_tree_to_csv(tree):
                      game_tieba[spider.GAME_TREE_GAME_TIEBA_LINK]])
 
 
-# 支持断点续传：初始化 CSV
-def init_game_tree_csv():
-    csv_f = open("gametree_progress.csv", "w", encoding="utf-8")
-    csv_w = csv.writer(csv_f)
-    csv_w.writerow(
-        ["gamename", "gametype", "follower_count", "topic_count", "tiebaurl"])
+# dump json to file
+def dump_json_to_file(filename, data):
+    with open(filename + ".json", 'w', encoding="utf-8") as outfile:
+        json.dump(data, outfile, ensure_ascii=False)
 
 
-# 支持断点续传：续写 CSV
-def append_game_tree_csv(data):
-    csv_w.writerow(data)
+# read json from file
+def read_json_from_file(filename):
+    try:
+        with open(filename + ".json", "r") as f:
+            return json.load(f)
+    except:
+        return None
