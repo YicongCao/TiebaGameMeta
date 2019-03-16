@@ -40,7 +40,7 @@ graph LR
 数据落地-->存入DB
 ```
 
-
+![mermaid](https://ws3.sinaimg.cn/large/006tKfTcgy1g14rcb4ljsj30hm0673yn.jpg)
 
 接近六万个贴吧，对每个贴吧获取其 HTML 文本、解析 HTML、数据入库，这里有这些坑：
 
