@@ -2,6 +2,7 @@
 import os
 import glob
 import csv
+import time
 from urllib.parse import urljoin, urlencode, quote_plus
 
 import spider
@@ -13,6 +14,7 @@ if __name__ == "__main__":
     csv_writer.writerow(
         ["gamename", "gametype", "follower_count", "topic_count", "tiebaurl"])
     total_count = 0
+    time_start = time.time()
     for infile in glob.glob("./htmlcache/*/*.html"):
         folder, fullname = os.path.split(infile)
         parentfolder, subfolder = os.path.split(folder)
@@ -27,7 +29,10 @@ if __name__ == "__main__":
                     [filename, subfolder, str(followers), str(topics), tieba_url])
                 total_count += 1
                 print('parsed ', total_count, ' tieba: ', filename, ", type: ", subfolder,
-                      ", followers: ", str(followers), ", topics: ", str(topics))
+                      ", followers: ", str(followers), ", topics: ", str(
+                          topics), ", remaining: ",
+                      str((time.time() - time_start)/(total_count+1)
+                          * (60000-total_count)/60) + "min")
                 if total_count % 20 == 0:
                     csv_file.flush()
         except Exception as e:
