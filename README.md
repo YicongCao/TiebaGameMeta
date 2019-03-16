@@ -1,5 +1,3 @@
-/Users/pulsar/anaconda3/bin/celery
-
 # 游戏贴吧数据爬取和分析
 
 百度贴吧的游戏品类下面，包含所有游戏贴吧的入口链接。从[这个页面](http://tieba.baidu.com/f/fdir?fd=%D3%CE%CF%B7&sd=%B5%E7%D7%D3%BE%BA%BC%BC%BC%B0%D1%A1%CA%D6)入手，可以拿到所有游戏贴吧的人气数据，对游戏名称、游戏类型、关注者数量、帖子数量等进行数据分析。
