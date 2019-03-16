@@ -42,7 +42,7 @@ with open('gametree.csv', 'r', encoding='utf-8') as f:
         # if line['name'] in gameset:
         #     continue
         columns = {}
-        columns['name'] = line['gamename']
+        columns['name'] = line['gamename'].replace("\"", "")
         columns['type'] = line['gametype']
         columns['followers'] = line['follower_count']
         columns['topics'] = line['topic_count']
